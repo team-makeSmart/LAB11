@@ -54,30 +54,28 @@ class GameHero:
 #TODO These are intialized as global objects, fix to be local
 #TODO Fix code so it is less than 80 characters across to be more readable code
 startRoom = Room("startRoom",'This area is big and expansive.\nYou can see light coming from where you fell from\nIf only you could climb up!','NONE',false, false, "darkRoom", false, "skeletonRoom")
-darkRoom = Room("darkRoom",'The room is dark and you cannot see anything','KEY',true, false, "batRoom","startRoom", "islandRoom")
+darkRoom = Room("darkRoom",'The room is dark and you cannot see anything','LATTER',true, false, "batRoom","startRoom", "islandRoom")
 skeletonRoom = Room("skeletonRoom",'Stalagmites fill this cavern.  You see skeletons of past victims that fell down the well','MATCHES',true, "startRoom", false, false, "batRoom")
 batRoom = Room("batRoom",'This walls of the cavern are filled with thousands of twitchy, hanging bats\nIt smells of bat guano and you worry if you are bitten, you may get rabbies','TORCH',true, "darkRoom", false, "skeletonRoom", false)
 islandRoom = Room("islandRoom",'The room is surrounded by a lake, it looks pristine\n The water is almost blue','ROPE',true, false, false, "darkRoom", false)
 
-def main():  
+
   #TODO fix main.... Does not work.  
-  #Fix main so that use can move throughout the cavern
-  explorer = GameHero
-  while(explorer.userInput != "EXIT"):
-    if (explorer.location == "startRoom"):  
-      startRoom.printDetails()
-    elif (explorer.location == "darkRoom"):  
-      startRoom.printDetails()
-    elif (explorer.location == "skeletonRoom"):  
-      startRoom.printDetails()
-    elif (explorer.location == "batRoom"):  
-      startRoom.printDetails()
-    elif (explorer.location == "lakeRoom"):  
-      startRoom.printDetails()
-    explorer.location = requestString('Input Direction')
-    
-
-
-
-
-
+  #TODO Fix main so that use can move throughout the cavern
+  #TODO Idea is that user input will be EXIT, HELP, USE, GET or a direction based on the available directions in the room  
+explorer = GameHero
+while(explorer.userInput != "EXIT"):
+  if (explorer.location == "startRoom"):  
+    startRoom.printDetails()
+  elif (explorer.location == "darkRoom"):  
+    darkRoom.printDetails()
+  elif (explorer.location == "skeletonRoom"):  
+    skeletonRoom.printDetails()
+  elif (explorer.location == "batRoom"):  
+    batRoom.printDetails()
+  elif (explorer.location == "islandRoom"):  
+    islandRoom.printDetails()
+  userInput = requestString('Input Direction')
+  userInput = userInput.upper() #change to uppercase
+  
+  
