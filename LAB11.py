@@ -45,11 +45,14 @@ class GameHero:
   
  
     
-  
+#TODO find where best ot put a menuOptions function to print menu options for user to input
+#TODO Menu options should include EXIT, HELP, GET (To GET ITEMS FROM ROOM), USE (TO USE ITEMS IN ROOM)
+#TODO Menu options should also include up, down, left, right to move from room to room.
 
 
 #initialize all the rooms
 #TODO These are intialized as global objects, fix to be local
+#TODO Fix code so it is less than 80 characters across to be more readable code
 startRoom = Room("startRoom",'This area is big and expansive.\nYou can see light coming from where you fell from\nIf only you could climb up!','NONE',false, false, "darkRoom", false, "skeletonRoom")
 darkRoom = Room("darkRoom",'The room is dark and you cannot see anything','KEY',true, false, "batRoom","startRoom", "islandRoom")
 skeletonRoom = Room("skeletonRoom",'Stalagmites fill this cavern.  You see skeletons of past victims that fell down the well','MATCHES',true, "startRoom", false, false, "batRoom")
@@ -58,6 +61,7 @@ islandRoom = Room("islandRoom",'The room is surrounded by a lake, it looks prist
 
 def main():  
   #TODO fix main.... Does not work.  
+  #Fix main so that use can move throughout the cavern
   explorer = GameHero
   while(explorer.userInput != "EXIT"):
     if (explorer.location == "startRoom"):  
