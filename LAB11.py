@@ -70,8 +70,7 @@ def main():
       startRoom.printDetails()
     elif (explorer.location == "lakeRoom"):  
       startRoom.printDetails()
-    explorer.location = "batRoom"
-    requestString('Input Direction')
+    explorer.location = requestString('Input Direction')
     
 
 
