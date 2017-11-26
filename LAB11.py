@@ -43,7 +43,14 @@ class GameHero:
   userInput = "" #TODO not sure this variable should be here
   location = "startRoom" #initialized to startRoom because this is where game starts
   
- 
+def welcomeMsg():
+  """ This is the welcome message that displays at the beginning and also whenever the user enters help"""
+  """ Welcome message also displays a list of commands
+  #TODO makes this function output a little more clear
+  printNow('************************')
+  printNow('CAVE ESCAPE.  You have fallen down a cave and you must get out.\nSearch the cave for items that will help you escape.')
+  printNow('COMMANDS: ENTER UP, DOWN, LEFT, OR RIGHT TO MOVE.  \nENTER HELP TO SEE THIS MESSAGE.\n ENTER EXIT TO QUIT') 
+  printNow('************************')
     
 #TODO find where best ot put a menuOptions function to print menu options for user to input
 #TODO Menu options should include EXIT, HELP, GET (To GET ITEMS FROM ROOM), USE (TO USE ITEMS IN ROOM)
@@ -63,19 +70,26 @@ islandRoom = Room("islandRoom",'The room is surrounded by a lake, it looks prist
   #TODO fix main.... Does not work.  
   #TODO Fix main so that use can move throughout the cavern
   #TODO Idea is that user input will be EXIT, HELP, USE, GET or a direction based on the available directions in the room  
-explorer = GameHero
-while(explorer.userInput != "EXIT"):
-  if (explorer.location == "startRoom"):  
-    startRoom.printDetails()
-  elif (explorer.location == "darkRoom"):  
-    darkRoom.printDetails()
-  elif (explorer.location == "skeletonRoom"):  
-    skeletonRoom.printDetails()
-  elif (explorer.location == "batRoom"):  
-    batRoom.printDetails()
-  elif (explorer.location == "islandRoom"):  
-    islandRoom.printDetails()
-  userInput = requestString('Input Direction')
-  userInput = userInput.upper() #change to uppercase
-  
-  
+def main():
+  explorer = GameHero
+  welcomeMsg()
+  while(true):
+    userInput = requestString('INPUT COMMAND')
+    userInput = userInput.upper()    
+    if(userInput == "HELP"):
+      welcomeMsg()
+    elif userInput == "EXIT":
+      printNow('Even though you\'re a quiter, Thank you for playing!')
+      break #ends loop and program execution
+    elif userInput == "GET":
+      printNow("Figure out how to get items from a room")
+    elif userInput == "USE":
+      printNow('You just used an item')  
+    elif userInput == "UP":
+      printNow("You just went up")
+    elif userInput == "DOWN":
+      printNow("You just went down")
+    elif userInput == "RIGHT":
+      printNow("You just went right")
+    elif userInput == "LEFT":
+      printNow("You just went left")
