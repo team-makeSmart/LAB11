@@ -1,95 +1,132 @@
-#TEAM MAKESMART 
-#Maco Doussias, Pavlos Papadonikolakis, Jake McGhee 
-#LAB11
-#11-24-17
+# TEAM MAKESMART
+# Maco Doussias, Pavlos Papadonikolakis, Jake McGhee
+# LAB11
+# 11-24-17
 
-#Game Description:
-#An explorer has fallen down an hole in the ground and into a cave.  He/She cannot climb back out.
-#Many people have died in the cave.  The explorer must explore the cave to find objects to climb back out
-#Steps to win:
+# CAVE ESCAPE Game Description:
+# An explorer has fallen down a hole in the ground and into a cave.  He/She cannot climb back out.
+# Many people have died in the cave.  The explorer must explore the cave to find objects to climb back out
+# Steps to win:
 # 1) Find the MATCHES and TORCH items
 # 2) Use MATCHES and TORCH in the darkRoom to find the LATTER
-# 3) Use the LATTER as a bridge to get the lakeRoom
+# 3) Use the LATTER as a bridge to get to the lakeRoom
 # 4) Find the ROPE in the lakeRoom
-# 5) use the ROPE in the startRoom to climb out of the cave and win the game
+# 5) Use the ROPE in the startRoom to climb out of the cave and win the game
+#
+# MAP OF CAVE
+#  [startRoom]    -  [darkRoom]  -  [islandRoom]
+#      |                 |    
+#  [skeletonRoom] -  [batRoom] 
 
+#TODO change the above program description... the winning conditions and items are not needed for lab 11, but will be needed for lab 12
 
-class Room():
- 
-  def __init__(self, roomName, description, items, contentsBool, up, down, left, right):
-    """initializes variables with parameters when object is declared"""
-    """TODO roomName may be superfluous to the program"""
-    """TODO contentsBool may be superfluous to program... Intended make sure user knows if no items in room but can be done in other ways """
-    """ Description: holds a description of the room. Items: holds items found in room"""
-    """ up,down,left,right: holds info on adjacent room, False if there is no adjacent room in that direction"""
-    self.roomName = roomName
-    self.description = description
-    self.items = items
-    self.contentsBool = contentsBool
-    self.up = up
-    self.down = down
-    self.left = left
-    self.right = right
+def map(): #Serves as the additional feature required per classroom instruction
+  """This function prints map of the cave"""
+  printNow('************************')
+  printNow('MAP OF CAVE:')
+  printNow("[startRoom]    -  [darkRoom]  -  [islandRoom]")
+  printNow("     |                 |")    
+  printNow("[skeletonRoom] -  [batRoom]") 
+  printNow('************************')
 
-  def printDetails(self):
-    printNow('************************')
-    printNow(self.description)
-    printNow('ITEMS IN ROOM:'+self.items) 
-    printNow('************************')
+def getHelp(): #TODO help message may need fixed according to classroom insturction
+  printNow("What to do to win the game") 
+  printNow("and what are the commands to navigate")
+  return 
 
-class GameHero:
-  '''This is the class of the hero that is playing the game'''
-  inventory = [] #This array holds the inventory that the user collects
-  userInput = "" #TODO not sure this variable should be here
-  location = "startRoom" #initialized to startRoom because this is where game starts
+def welcomeMessage(): #TODO carefully read instructions from class, do we need to display welcomeMessage every time user enters HELP?
+  return '\t\t*** Welcome to 205 Adventure Land! ***\n ' \
+  'In each room you will be told which directions you can go\n You\'ll be' \
+  ' able to go north, south, east or west by typing that direction\n' \
+  ' Type help to redisplay this introduction exit to quit at any time\n' \
+  'Please enter direction to start: '
+
+def printDetails(description):
+  printNow('************************')
+  printNow(description)
+  printNow('************************')
+
+def getCommand(roomSpecificCommands):
+  """ Gets a command from the user, ensure it is an acceptable command for the program and returns command"""
+  """If the command is not a valid entry, displays error message and requests user to enter a valid command"""
+  acceptableCommands = ['EXIT','HELP','MAP'] + roomSpecificCommands
+  allAcceptableCommandsInOneString = "COMMANDS: " 
+  for i in range(0,len(acceptableCommands)): #This for loops puts all the acceptable commands into a single string
+    allAcceptableCommandsInOneString += acceptableCommands[i] + " " #TODO Yes these variables could be renamed to be shorter
+  while true:
+  #TODO find a good exception handling technique if user presses cancel or other buttons on the requestString() pop-up box.  Otherwise the program crash.
+    command = requestString(allAcceptableCommandsInOneString + '\nEnter Command:')  #TODO Fix needs that acceptable commands must be stated in requestString()  Need to add acceptableCommands to the prompt
+    command = command.upper()    
+    if command not in acceptableCommands:
+      printNow('************************')
+      printNow("ERROR! Not a valid entry!")
+      printNow("Acceptable Commands for this room are")
+      printNow(acceptableCommands)     
+      printNow('************************')
+    else:
+      return command    
+
+def startRoom(): #TODO make these text line length less than 80 characters long for better viewability of code
+  description = 'START ROOM!\nThis area is big and expansive.\nYou can see light coming from where you fell.\nIf only you could climb up!'
+  printDetails(description)
+  userCommand = getCommand(['RIGHT','DOWN'])
+  return userCommand
+
+def darkRoom(): #TODO make these text line length less than 80 characters long for better viewability of code
+  description = 'DARK ROOM!\nThe room is dark and you cannot see much\nIt smells damp and you can hear critters in the nearby water.\nIf only you had more light!'
+  printDetails(description)
+  userCommand = getCommand(['RIGHT','DOWN','LEFT'])
+  return userCommand
+
+def skeletonRoom():#TODO make these text line length less than 80 characters long for better viewability of code
+  description = 'SKELETON ROOM!\nStalagmites fill this cavern.\nYou see skeletons of past victims that fell down the well.\nPoor souls!'
+  printDetails(description)
+  userCommand = getCommand(['UP','RIGHT'])
+  return userCommand
   
-def welcomeMsg():
-  """ This is the welcome message that displays at the beginning and also whenever the user enters help"""
-  """ Welcome message also displays a list of commands
-  #TODO makes this function output a little more clear
-  printNow('************************')
-  printNow('CAVE ESCAPE.  You have fallen down a cave and you must get out.\nSearch the cave for items that will help you escape.')
-  printNow('COMMANDS: ENTER UP, DOWN, LEFT, OR RIGHT TO MOVE.  \nENTER HELP TO SEE THIS MESSAGE.\n ENTER EXIT TO QUIT') 
-  printNow('************************')
-    
-#TODO find where best ot put a menuOptions function to print menu options for user to input
-#TODO Menu options should include EXIT, HELP, GET (To GET ITEMS FROM ROOM), USE (TO USE ITEMS IN ROOM)
-#TODO Menu options should also include up, down, left, right to move from room to room.
+def batRoom():#TODO make these text line length less than 80 characters long for better viewability of code
+  description = 'BATROOM!\n The walls of the cavern are filled with thousands of hanging bats\n It smells of bat guano... Yuck.\nIf you are bitten, you may get rabbies!'
+  printDetails(description)
+  userCommand = getCommand(['LEFT','UP'])
+  return userCommand  
+  
+def islandRoom():#TODO make these text line length less than 80 characters long for better viewability of code
+  description = 'ISLAND ROOM!\nThe room is surrounded by a large lake that looks pristine\nThe water is blue and it refracts light on the cavern walls.\nThe water is very cold!'
+  printDetails(description)
+  userCommand = getCommand(['LEFT'])
+  return userCommand           
 
-
-#initialize all the rooms
-#TODO These are intialized as global objects, fix to be local
-#TODO Fix code so it is less than 80 characters across to be more readable code
-startRoom = Room("startRoom",'This area is big and expansive.\nYou can see light coming from where you fell from\nIf only you could climb up!','NONE',false, false, "darkRoom", false, "skeletonRoom")
-darkRoom = Room("darkRoom",'The room is dark and you cannot see anything','LATTER',true, false, "batRoom","startRoom", "islandRoom")
-skeletonRoom = Room("skeletonRoom",'Stalagmites fill this cavern.  You see skeletons of past victims that fell down the well','MATCHES',true, "startRoom", false, false, "batRoom")
-batRoom = Room("batRoom",'This walls of the cavern are filled with thousands of twitchy, hanging bats\nIt smells of bat guano and you worry if you are bitten, you may get rabbies','TORCH',true, "darkRoom", false, "skeletonRoom", false)
-islandRoom = Room("islandRoom",'The room is surrounded by a lake, it looks pristine\n The water is almost blue','ROPE',true, false, false, "darkRoom", false)
-
-
-  #TODO fix main.... Does not work.  
-  #TODO Fix main so that use can move throughout the cavern
-  #TODO Idea is that user input will be EXIT, HELP, USE, GET or a direction based on the available directions in the room  
 def main():
-  explorer = GameHero
-  welcomeMsg()
-  while(true):
-    userInput = requestString('INPUT COMMAND')
-    userInput = userInput.upper()    
-    if(userInput == "HELP"):
-      welcomeMsg()
-    elif userInput == "EXIT":
-      printNow('Even though you\'re a quiter, Thank you for playing!')
-      break #ends loop and program execution
-    elif userInput == "GET":
-      printNow("Figure out how to get items from a room")
-    elif userInput == "USE":
-      printNow('You just used an item')  
-    elif userInput == "UP":
-      printNow("You just went up")
-    elif userInput == "DOWN":
-      printNow("You just went down")
-    elif userInput == "RIGHT":
-      printNow("You just went right")
-    elif userInput == "LEFT":
-      printNow("You just went left")
+  x = 0  #represents an x cartestian coordinate
+  y = 0  #represents a y cartestian coordinate
+  
+  #Get input from user by calling the room functions.  Input will be specific to each room
+  while true:
+    if x == 0 and y == 0:
+      userCommand = startRoom()
+    elif x == 0 and y == -1:
+      userCommand = skeletonRoom()
+    elif x == 1 and y == 0:
+      userCommand = darkRoom()
+    elif x == 2 and y == 0:
+      userCommand = islandRoom()                
+    elif x == 1 and y == -1:
+      userCommand = batRoom()
+    
+    #Process off of what user input or userCommand is
+    if userCommand == 'HELP':
+      getHelp()
+    elif userCommand == 'EXIT':
+      printNow("Even though you are a quiter, thank you for playing!")
+      return #effectively exit the program
+    elif userCommand == 'MAP':
+      map()                               
+    elif userCommand == 'UP':
+      y += 1 
+    elif userCommand == 'DOWN':
+      y -= 1           
+    elif userCommand == 'RIGHT':
+      x += 1
+    elif userCommand == 'LEFT':
+      x -= 1 
+
