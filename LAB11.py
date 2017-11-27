@@ -3,178 +3,172 @@
 # LAB11
 # 11-24-17
 
-# Game Description:
-# An explorer has fallen down an hole in the ground and into a cave.  He/She cannot climb back out.
-# Many people have died in the cave.  The explorer must explore the cave to find objects to climb back out
-# Steps to win:
-# 1) Find the MATCHES and TORCH items
-# 2) Use MATCHES and TORCH in the darkRoom to find the LATTER
-# 3) Use the LATTER as a bridge to get the lakeRoom
-# 4) Find the ROPE in the lakeRoom
-# 5) use the ROPE in the startRoom to climb out of the cave and win the game
+# CAVE ESCAPE Game Description:
+# An explorer has fallen down a hole in the ground and into a cave. In order to navigate through the cave,
+# s/he has to use specific commands that lead to specific directions inside the cave. If the user is lost
+# or confused, there is a map or a help description available.
+# MAP OF CAVE
+#  [startRoom]    -  [darkRoom]  -  [islandRoom]
+#      |                 |
+#  [skeletonRoom] -  [batRoom]
+
+def map():  # Serves as the additional feature required per classroom instruction
+    """ prints map of the cave """
+    printNow('************************')
+    printNow('MAP OF CAVE:')
+    printNow("[startRoom]    -  [darkRoom]  -  [islandRoom]")
+    printNow("     |                 |")
+    printNow("[skeletonRoom] -  [batRoom]")
+    printNow('************************')
 
 
-class Room():
-    navigate = ''
+def getHelp():
+    """ Prints help instructions to the user, if the user enters the 'HELP' command """
+    printNow (welcomeMessage())
 
-    # starting position with posible moves
-    currentRoom = [['startRoom', 'darkRoom', 'islandRoom'],
-                   ['skeletonRoom', 'batRoom']]
 
-    roomsSize = len(currentRoom)
-    row = 0
-    col = 0
+def welcomeMessage():
+    """ displays a wellcome message that displays the rules of the game """
+    return '*** WELLCOME TO THE CAVE ESCAPE GAME! ***\n' \
+           '-- In each room you will be told which directions you can go\n-- You\'ll be' \
+           'able to go north, south, east or west by typing that direction\n' \
+           '-- Type HELP to redisplay this introduction --\n' \
+           '-- Type MAP for a cave map\n' \
+           '-- Type EXIT to quit at any time\n'
 
-    def __init__(self, roomName=None, description=None, items=None):
-        """initializes variables with parameters when object is declared"""
-        
-        self.roomName = roomName
-        self.description = description
-        self.items = items
-        self.navigate = self.printDirections(roomName)
 
-    def getItems(self):
-        return self.items
+def printDetails(description):
+    """ prints the details of each room """
 
-    def printDetails(self):
-        print ('************************')
-        print(self.description)
-        print('Items in room: ' + self.items)
-        print self.navigate
-        print('************************')
+    printNow('************************')
+    printNow ('YOU ARE CURRENTLY in :')
+    printNow(description)
+    printNow('************************')
 
-    def printDirections(self, roomName):
-        if roomName == 'startRoom':
-            self.navigate = 'You can go east or south'
-        elif roomName == 'darkRoom':
-            self.navigate = 'You can go east, south or west'
-        elif roomName == 'batRoom':
-            self.navigate = 'You can go north or west'
-        elif roomName == 'skeletonRoom':
-            self.navigate = 'You can go north or east'
-        elif roomName == 'islandRoom':
-            self.navigate = 'You can go only west, back to the dark room '
-        return self.navigate
 
-    def getHelp(self):
-        return "What to do to win the game\n" \
-               "and what are the commands to navigate"
+def getCommand(roomSpecificCommands):
+    """ Gets a command from the user, ensure it is an acceptable command for the program and returns command
+        If the command is not a valid entry, displays error message and requests user to enter a valid command
+        :param roomSpecificCommands (list) the specific commands for the given room
+        :return command (string) the command typed by the user
+    """
 
-    def wellcomeMessage(self):
-        return '\t\t*** Welcome to 205 Adventure Land! ***\n ' \
-               'In each room you will be told which directions you can go\n You\'ll be' \
-               ' able to go north, south, east or west by typing that direction\n' \
-               ' Type help to redisplay this introduction exit to quit at any time\n' \
-               'Please enter direction to start: '
+    acceptableCommands = ['EXIT', 'HELP', 'MAP'] + roomSpecificCommands
+    allValidCommands = "COMMANDS: "
 
-    def onBounds(self):
-        """
-        checks the bounds of the rooms
-        :return:true if the user is inside the rooms
-        """
-        if self.col == 2 and self.row == 0:
-            return 0 <= self.row < self.roomsSize and 0 <= self.col < len(self.currentRoom[0])
+    for i in range(0, len(acceptableCommands)):  # This for loops puts all the acceptable commands into a single string
+        allValidCommands += acceptableCommands[i] + ' '
+
+    while True:
+
+        command = requestString(
+            allValidCommands + '\nEnter Command:')
+        command = command.upper()
+
+        if command not in acceptableCommands:
+            printNow('************************')
+            printNow("ERROR! Not a valid entry!")
+            printNow("Acceptable Commands for this room are")
+            printNow(acceptableCommands)
+            printNow('************************')
         else:
-            return 0 <= self.row < self.roomsSize and 0 <= self.col < len(self.currentRoom[1])
-
-    def goEast(self):
-
-        self.col += 1
-        if self.onBounds():
-            return True
-        else:
-            self.col -= 1
-        return False
-
-    def goWest(self):
-
-        self.col -= 1
-        if self.onBounds():
-            return True
-        else:
-            self.col += 1
-        return False
-
-    def goNorth(self):
-        self.row -= 1
-        if self.onBounds():
-            return True
-        else:
-            self.row += 1
-        return False
-
-    def goSouth(self):
-        self.row += 1
-        if self.onBounds():
-            return True
-        else:
-            self.row -= 1
-        return False
-
-    # --------------------------------
-    def getCurrentRoom(self):
-        if self.onBounds():
-            return self.currentRoom[self.row][self.col]
-        return False
-
-    def whichRoom(self, roomName):
-        if roomName == skeletonRoom.roomName:
-            return skeletonRoom
-        elif roomName == startRoom.roomName:
-            return startRoom
-        elif roomName == darkRoom.roomName:
-            return darkRoom
-        elif roomName == batRoom.roomName:
-            return batRoom
-        else:
-            return islandRoom
+            return command
 
 
-startRoom = Room("startRoom", 'This area is big and expansive.\nYou can see light coming from where you fell from\n'
-                              'If only you could climb up!', 'NONE')
-darkRoom = Room("darkRoom", 'The room is dark and you cannot see anything', 'LATTER')
-skeletonRoom = Room("skeletonRoom", 'Stalagmites fill this cavern.  You see skeletons of past victims that'
-                                    ' fell down the well', 'MATCHES')
-batRoom = Room("batRoom", 'This walls of the cavern are filled with thousands of twitchy, hanging bats\n'
-                          'It smells of bat guano and you worry if you are bitten, you may get rabbies', 'TORCH')
-islandRoom = Room("islandRoom",
-                  'The room is surrounded by a lake, it looks pristine\n'
-                  'The water is almost blue',
-                  'ROPE')
+def startRoom():
+    """ the first room
+         :return userCommand (string) the command typed by the user
+    """
+    description = 'START ROOM!\nThis area is big and expansive.\n' \
+                  'You can see light coming from where you fell.\nIf only you could climb up!'
+    printDetails(description)
+    userCommand = getCommand(['RIGHT', 'DOWN'])
+    return userCommand
 
 
+def darkRoom():
+    """ one of the rooms
+        :return userCommand (string) the command typed by the user
+    """
+    description = 'DARK ROOM!\nThe room is dark and you cannot see much\n' \
+                  'It smells damp and you can hear critters in the nearby water.\n' \
+                  'If only you had more light!'
+    printDetails(description)
+    userCommand = getCommand(['RIGHT', 'DOWN', 'LEFT'])
+    return userCommand
 
 
+def skeletonRoom():
+    """ one of the rooms
+        :return userCommand (string) the command typed by the user
+    """
+    description = 'SKELETON ROOM!\nStalagmites fill this cavern.\n' \
+                  'You see skeletons of past victims that fell down the well.\nPoor souls!'
+    printDetails(description)
+    userCommand = getCommand(['UP', 'RIGHT'])
+    return userCommand
 
-currentPosition = startRoom
 
-currentPosition.goEast()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
+def batRoom():
+    """ one of the rooms
+        :return userCommand (string) the command typed by the user
+    """
+    description = 'BATROOM!\n The walls of the cavern are filled with thousands of hanging bats\n ' \
+                  'It smells of bat guano... Yuck.\nIf you are bitten, you may get rabbies!'
+    printDetails(description)
+    userCommand = getCommand(['LEFT', 'UP'])
+    return userCommand
 
-currentPosition.goEast()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
 
-currentPosition.goSouth()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
+def islandRoom():
+    """ one of the rooms
+        :return userCommand (string) the command typed by the user
+    """
+    description = 'ISLAND ROOM!\nThe room is surrounded by a large lake that looks pristine\n' \
+                  'The water is blue and it refracts light on the cavern walls.\nThe water is very cold!'
+    printDetails(description)
+    userCommand = getCommand(['LEFT'])
+    return userCommand
 
-currentPosition.goWest()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
 
-currentPosition.goWest()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
-currentPosition.goWest()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
+def main():
+    """main function, starts the game """
 
-currentPosition.goSouth()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
+    printNow (welcomeMessage())
+    x = 0  # represents an x cartestian coordinate
+    y = 0  # represents a y cartestian coordinate
 
-currentPosition.goWest()
-currentRoom = currentPosition.whichRoom(currentPosition.getCurrentRoom())
-print currentRoom.roomName
+    # Get input from user by calling the room functions.  Input will be specific to each room
+    while True:
+
+        if x == 0 and y == 0:
+            userCommand = startRoom()
+        elif x == 0 and y == -1:
+            userCommand = skeletonRoom()
+        elif x == 1 and y == 0:
+            userCommand = darkRoom()
+        elif x == 2 and y == 0:
+            userCommand = islandRoom()
+        elif x == 1 and y == -1:
+            userCommand = batRoom()
+
+        # Process off of what user input or userCommand is
+        if userCommand == 'HELP':
+            getHelp()
+
+        elif userCommand == 'EXIT':
+            print("Even though you are a quiter, thank you for playing!")
+            return  # effectively exit the program
+        elif userCommand == 'MAP':
+            map()
+        elif userCommand == 'UP':
+            y += 1
+        elif userCommand == 'DOWN':
+            y -= 1
+        elif userCommand == 'RIGHT':
+            x += 1
+        elif userCommand == 'LEFT':
+            x -= 1
+
+
+main()
