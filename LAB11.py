@@ -12,12 +12,16 @@
 #      |                 |
 #  [skeletonRoom] -  [batRoom]
 
-def map():  # Serves as the additional feature required per classroom instruction
-    """ prints map of the cave """
+
+# map() Serves as the additional feature required per classroom instruction
+# It has a special output in the Dark Room
+def map():  
+    """ Prints map of the cave """
+    """ Map can only be read in rooms with sufficient lighting """
     printNow('************************')
     printNow('MAP OF CAVE:')
     printNow("[startRoom]    -  [darkRoom]  -  [islandRoom]")
-    printNow("     |                 |")
+    printNow("     |                                  |")
     printNow("[skeletonRoom] -  [batRoom]")
     printNow('************************')
 
@@ -31,7 +35,7 @@ def welcomeMessage():
     """ displays a wellcome message that displays the rules of the game """
     return '*** WELLCOME TO THE CAVE ESCAPE GAME! ***\n' \
            '-- In each room you will be told which directions you can go\n-- You\'ll be' \
-           'able to go north, south, east or west by typing that direction\n' \
+           'able to go UP, DOWN, LEFT or RIGHT by typing that direction\n' \
            '-- Type HELP to redisplay this introduction --\n' \
            '-- Type MAP for a cave map\n' \
            '-- Type EXIT to quit at any time\n'
@@ -160,7 +164,12 @@ def main():
             print("Even though you are a quiter, thank you for playing!")
             return  # effectively exit the program
         elif userCommand == 'MAP':
-            map()
+            if x == 1 and y == 0:
+                printNow('************************')
+                printNow('You squint and try, but you cannot read your map in the Dark Room!')
+                printNow('************************')
+            else:
+                map() #Display the map to the console
         elif userCommand == 'UP':
             y += 1
         elif userCommand == 'DOWN':
@@ -170,5 +179,5 @@ def main():
         elif userCommand == 'LEFT':
             x -= 1
 
-
+#executes the main function on load
 main()
