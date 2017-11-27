@@ -12,10 +12,7 @@
 #      |                 |
 #  [skeletonRoom] -  [batRoom]
 
-
-# map() Serves as the additional feature required per classroom instruction
-# It has a special output in the Dark Room
-def map():  
+def map():  # Serves as the additional feature required per classroom instruction
     """ Prints map of the cave """
     """ Map can only be read in rooms with sufficient lighting """
     printNow('************************')
@@ -166,7 +163,7 @@ def main():
         elif userCommand == 'MAP':
             if x == 1 and y == 0:
                 printNow('************************')
-                printNow('You squint and try, but you cannot read your map in the Dark Room!')
+                printNow('You cannot read your map in the Dark Room')
                 printNow('************************')
             else:
                 map() #Display the map to the console
